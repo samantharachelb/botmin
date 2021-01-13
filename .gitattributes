@@ -1,0 +1,4 @@
+**/*.json -linguist-detectable
+scripts/*.sh -linguist-detectable
+docs/** linguist-documentation
+
