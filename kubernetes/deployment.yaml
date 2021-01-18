@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: botmin
+  namespace: shitty-discord-bots
+  labels:
+    app.kubernetes.io/name: botmin
+    app.kubernetes.io/instance: botmin
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: botmin
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 2
+  minReadySeconds: 30
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: botmin
+        app.kubernetes.io/instance: botmin
+    spec:
+      containers:
+        - name: botmin
+          image: gcr.io/shitty-discord-bots/botmin:latest
+          imagePullPolicy: Always
+          env:
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DISCORD_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: botmin-secrets
+                  key: botToken
+            - name: DB_HOST
+              value: "10.118.0.10"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: botmin-secrets
+                  key: dbUsername
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: botmin-secrets
+                  key: dbPassword
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: botmin-secrets
+                  key: dbDatabase

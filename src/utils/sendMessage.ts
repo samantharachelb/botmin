@@ -5,16 +5,16 @@ const log = require("@src/core/Log").Log.logger;
 export default async function sendMessage(
     message: CommandMessage,
     content: string,
-    delMsg: boolean = Config.deleteMessage,
-    delCmd: boolean = Config.deleteCommand): Promise<void> {
+    delMsg: boolean = Config.botDeleteMessage,
+    delCmd: boolean = Config.botDeleteCommand): Promise<void> {
 
     message.channel.send(content)
         .then((msg: any) => {
             if(delMsg)
-                msg.delete({timeout: Config.messageTimeout});
+                msg.delete({timeout: Config.botMessageTimeout});
 
             if(delCmd)
-                message.delete({timeout: Config.messageTimeout});
+                message.delete({timeout: Config.botMessageTimeout});
 
         })
         .catch(e => {

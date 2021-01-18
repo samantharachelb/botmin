@@ -15,9 +15,9 @@ export default abstract class Config {
 
     static discordKey: string;
     static botPrefix: string;
-    static messageTimeout: number;
-    static deleteCommand: true;
-    static deleteMessage: true;
+    static botMessageTimeout: number;
+    static botDeleteCommand: true;
+    static botDeleteMessage: true;
 
     static boolConv(val: string | undefined): boolean | void {
         switch(val) {
@@ -53,12 +53,12 @@ export default abstract class Config {
 
         this.botPrefix = env.BOT_PREFIX || "!bm";
         if(env.MSG_TIMEOUT) {
-            this.messageTimeout = parseInt(env.MSG_TIMEOUT) * 1000; // convert to ms
+            this.botMessageTimeout = parseInt(env.MSG_TIMEOUT) * 1000; // convert to ms
         } else {
-            this.messageTimeout = 15 * 1000; // 15,000ms / 15s
+            this.botMessageTimeout = 15 * 1000; // 15,000ms / 15s
         }
-        this.deleteCommand = this.boolConv(env.BOT_DELETEMSG) || true;
-        this.deleteMessage = this.boolConv(env.BOT_DELETECMD) || true;
+        this.botDeleteCommand = this.boolConv(env.BOT_DELETEMSG) || true;
+        this.botDeleteMessage = this.boolConv(env.BOT_DELETECMD) || true;
 
     }
 }

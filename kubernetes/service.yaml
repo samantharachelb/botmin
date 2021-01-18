@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: shitty-discord-bots
+  labels:
+    app.kubernetes.io/name: mongodb
+spec:
+  clusterIP: None
+  selector:
+    name: botmin
+  ports:
+    - name: mongodb
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+  externalIPs:
+    - "10.118.0.10"

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: verifbot-config
+  namespace: shitty-discord-bots
+data:
+  botPrefix: "!bm"
+  botDeleteMessages: "yes"
+  botDeleteCommands: "yes"
+  botMessageTimeout: "15"
