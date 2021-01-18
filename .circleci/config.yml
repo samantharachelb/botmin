@@ -8,7 +8,6 @@ jobs:
           password: $DOCKERHUB_PW
     steps:
       - checkout
-      - setup_remote_docker
       - run:
           name: install podman
           command: |
@@ -16,6 +15,7 @@ jobs:
             curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_18.04/Release.key| sudo apt-key add -
             sudo apt-get update
             sudo apt-get install podman
+      - setup_remote_docker
       - run:
           name: build docker image
           command: |
