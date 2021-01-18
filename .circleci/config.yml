@@ -12,8 +12,10 @@ jobs:
       - run:
           name: install podman
           command: |
-            apk update
-            apk add podman
+            echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:testing.list
+            curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/Release.key| sudo apt-key add -
+            sudo apt-get update
+            sudo apt-get install podman
       - run:
           name: build docker image
           command: |
