@@ -2,31 +2,27 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/node:14.15
-        auth:
-          username: emilysamiibocorner
-          password: $DOCKERHUB_PW
+      - image: ubuntu-2004:202010-01
     steps:
       - checkout
       - run:
           name: install podman
           command: |
-            echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_18.04/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:testing.list
-            curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_18.04/Release.key| sudo apt-key add -
+            echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:testing.list
+            curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/Release.key| sudo apt-key add -
             sudo apt-get update
-            sudo apt-get install podman
-      - setup_remote_docker
+            sudo apt-get install podman buildah
       - run:
           name: build docker image
           command: |
-            podman build -t $IMAGE_NAME:latest .
+            podman build -t "${IMAGE_NAME}:latest" .
       - run:
           name: push to GCR
           command: |
             echo "${GCR_AUTH}" > "${HOME}/gcr-key.json"
             cat "${HOME}/gcr-key.json" | docker login -u _json_key --password-stdin https://gcr.io
-            docker tag "${IMAGE_NAME}:latest" "${GCR_IMAGE_NAME}:latest"
-            docker push "${GCR_IMAGE_NAME}:latest"
+            podman tag "localhost/${IMAGE_NAME}:latest" "${GCR_IMAGE_NAME}:latest"
+            podman push "${GCR_IMAGE_NAME}:latest"
 workflows:
   version: 2
   build:
