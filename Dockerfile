@@ -1,5 +1,5 @@
 # Use slimmed down image of node:12 to build project
-FROM node:12-alpine AS BUILD_IMAGE
+FROM node:14-alpine AS BUILD_IMAGE
 
 # add project build requirements
 RUN apk update && apk add yarn curl bash python g++ make && rm -rf /var/cache/apk/*
@@ -24,11 +24,8 @@ RUN npm prune --production
 RUN /usr/local/bin/node-prune
 
 # Build deploy image
-FROM node:12-alpine
+FROM node:14-alpine
 WORKDIR /usr/src/app
 COPY --from=BUILD_IMAGE /usr/src/app/dist ./dist
 COPY --from=BUILD_IMAGE /usr/src/app/node_modules ./node_modules
-
-EXPOSE 3000
 CMD ["node", "dist/"]
-

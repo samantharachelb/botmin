@@ -1,19 +1,19 @@
 version: 2.1
 jobs:
   build:
-    machine:
-      image: ubuntu-2004:202010-01
+    docker:
+      - image: cimg/node:14.15
+        auth:
+          username: emilysamiibocorner
+          password: $DOCKERHUB_PW
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: install podman
           command: |
-            echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:testing.list
-            curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/Release.key| sudo apt-key add -
-            sudo apt-get update
-            sudo apt-get install podman
-      - run: sudo apt-get update
-      - run: sudo apt-get install podman
+            apk update
+            apk add podman
       - run:
           name: build docker image
           command: |
