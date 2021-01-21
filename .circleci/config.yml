@@ -15,7 +15,7 @@ jobs:
       - run:
           name: build docker image
           command: |
-            podman build -t "${IMAGE_NAME}:latest" .
+            sudo podman build -t "${IMAGE_NAME}:latest" .
       - run:
           name: push to GCR
           command: |
