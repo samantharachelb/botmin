@@ -14,8 +14,7 @@ jobs:
             sudo apt-get install podman buildah
       - run:
           name: build container image
-          command: |
-            sudo podman build -t botmin:latest .
+          command: podman build -t botmin:latest .
       - run:
           name: push to GCR
           command: |
