@@ -21,7 +21,7 @@ jobs:
           command: |
             echo "${GCR_AUTH}" > "${HOME}/gcr-key.json"
             cat "${HOME}/gcr-key.json" | docker login -u _json_key --password-stdin https://gcr.io
-            podman tag "localhost/${IMAGE_NAME}:latest" "${GCR_IMAGE_NAME}:latest"
+            podman tag "${IMAGE_NAME}:latest" "${GCR_IMAGE_NAME}:latest"
             podman push "${GCR_IMAGE_NAME}:latest"
 workflows:
   version: 2
