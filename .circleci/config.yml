@@ -13,7 +13,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install podman buildah
       - run:
-          name: build docker image
+          name: build container image
           command: |
             sudo podman build -t "${IMAGE_NAME}:latest" .
       - run:
