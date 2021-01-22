@@ -1,30 +1,63 @@
 version: 2.1
-jobs:
-  build:
+executors:
+  project:
+    docker:
+      - image: cimg/node:14.15
+    working_directory: ~/app
+  container:
     machine:
       image: ubuntu-2004:202010-01
+      docker_layer_caching: true
+    working_directory: ~/app
+jobs:
+  build_project:
+    executor: project
     steps:
       - checkout
       - run:
-          name: install podman
+          name: Build Project
+          command: |
+            npm ci
+            npm run build
+            npm prune --production
+      - persist_to_workspace:
+          root: /home/circleci/app
+          paths:
+            - node_modules
+            - dist
+            - Dockerfile
+  build_push_latest_image:
+    executor: container
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Install Podman
           command: |
             echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:testing.list
             curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/Release.key| sudo apt-key add -
             sudo apt-get update
-            sudo apt-get install podman buildah
+            sudo apt-get install podman
+            sudo chmod 4755 /usr/bin/newgidmap
+            sudo chmod 4755 /usr/bin/newuidmap
       - run:
-          name: build container image
+          name: Build Container Image
           command: |
             podman build -t "${IMAGE_NAME}:latest" .
       - run:
-          name: push to GCR
+          name: Push to GCR
           command: |
             echo "${GCR_AUTH}" > "${HOME}/gcr-key.json"
             cat "${HOME}/gcr-key.json" | podman login -u _json_key --password-stdin https://gcr.io
-            podman image push "${IMAGE_NAME}:latest" "${GCR_IMAGE_NAME}:latest"
+            podman image push botmin:latest gcr.io/shitty-discord-bots/botmin:latest
+
 workflows:
   version: 2
-  build:
+  build_latest:
     jobs:
-      - build:
+      - build_project:
           context: docker
+      - build_push_latest_image:
+          context: docker
+          requires:
+            - build_project
