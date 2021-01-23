@@ -2,7 +2,7 @@ version: 2.1
 executors:
   project:
     docker:
-      - image: cimg/node:14.15
+      - image: gcr.io/emily-cloud-build/node:14-base
     working_directory: ~/app
   container:
     machine:
@@ -14,12 +14,22 @@ jobs:
     executor: project
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - npm-cache-{{ .Branch }}-
+            - npm-cache-
       - run:
           name: Build Project
           command: |
             npm ci
             npm run build
-            npm prune --production
+            npm prune -- production
+            /usr/local/bin/node-prune
+      - save_cache:
+          paths:
+            - /home/circleci/app/node_modules
+          key: npm-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - persist_to_workspace:
           root: /home/circleci/app
           paths:
