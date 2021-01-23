@@ -4,6 +4,7 @@ import forceExit from "@utils/forceExit";
 const dotenv = require('dotenv');
 dotenv.config({path: "./env"})
 const env = process.env;
+const log = require('@src/core/Logging').Logging.logger;
 
 
 export default abstract class Config {
@@ -51,7 +52,7 @@ export default abstract class Config {
             forceExit(`${error}`)
         }
 
-        this.botPrefix = env.BOT_PREFIX || "!bm";
+        this.botPrefix = env.BOT_PREFIX || "!b;";
         if(env.MSG_TIMEOUT) {
             this.botMessageTimeout = parseInt(env.MSG_TIMEOUT) * 1000; // convert to ms
         } else {
@@ -60,5 +61,7 @@ export default abstract class Config {
         this.botDeleteCommand = this.boolConv(env.BOT_DELETEMSG) || true;
         this.botDeleteMessage = this.boolConv(env.BOT_DELETECMD) || true;
 
+        log.debug(`Bot Token ${this.discordKey}`);
     }
+
 }

@@ -23,8 +23,8 @@ abstract class Main {
         log.info(`Starting botmin `);
         this._client = new Client({
             classes: [
-                `${__dirname}/**/bot.ts`,
-                `${__dirname}/**/bot.js`
+                `${__dirname}/**/app.ts`,
+                `${__dirname}/**/app.js`
             ],
             silent: false,
             variablesChar: ":"
