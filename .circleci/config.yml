@@ -106,7 +106,8 @@ workflows:
                 - main
       - build_project:
           context: docker
-          requires: test_project
+          requires:
+            - test_project
       - build_push_latest_image:
           context: docker
           requires:
