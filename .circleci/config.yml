@@ -82,13 +82,6 @@ jobs:
             echo "${GCR_AUTH}" > "${HOME}/gcr-key.json"
             cat "${HOME}/gcr-key.json" | podman login -u _json_key --password-stdin https://gcr.io
             podman image push botmin:latest gcr.io/shitty-discord-bots/botmin:latest
-  test:
-    executor: bt_project
-    steps:
-      - attach_workspace:
-          at: ~/app
-      - run:
-          name:
 workflows:
   version: 2
   build_latest:
