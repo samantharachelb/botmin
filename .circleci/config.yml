@@ -60,6 +60,8 @@ jobs:
           key: npm-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
   build_push_latest_image:
     executor: containerize
+    environment:
+      - IMAGE_NAME: botmin
     steps:
       - attach_workspace:
           at: ~/app
@@ -120,7 +122,9 @@ workflows:
           requires:
             - test_project
       - build_push_latest_image:
-          context: docker     # pull environment variables
+          context:
+            - docker     # pull environment variables
+            - docker-latest
           requires:
             - build_project
   build_nopush:
