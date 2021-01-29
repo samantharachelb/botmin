@@ -19,7 +19,6 @@ abstract class Bot {
         bot.user.setActivity(`${Config.botPrefix}help`, {
             type: "LISTENING"
         });
-        HCommands.indexCommands();
     }
 
     @On("guildMemberRemove")
