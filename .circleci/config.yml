@@ -36,6 +36,28 @@ jobs:
             - node_modules
             - dist
             - Dockerfile
+  test_project:
+    executor: bt_project
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - npm-cache-{{ .Branch }}-
+            - npm-cache-
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Lint Project
+          command: npm run lint
+      - run:
+          name: Test Project
+          command: npm run test
+      - save_cache:
+          paths:
+            - /home/circle_ci/app/node_modules
+          key: npm-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
   build_push_latest_image:
     executor: containerize
     steps:
@@ -73,6 +95,25 @@ workflows:
     jobs:
       - build_project:
           context: docker
+          filters:
+            branches:
+              only:
+                - develop
+      - build_push_latest_image:
+          context: docker
+          requires:
+            - build_project
+  build_test:
+    jobs:
+      - test_project:
+          context: docker
+          filters:
+            branches:
+              only:
+                - main
+      - build_project:
+          context: docker
+          requires: test_project
       - build_push_latest_image:
           context: docker
           requires:
