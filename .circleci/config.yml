@@ -73,6 +73,12 @@ jobs:
             sudo chmod 4755 /usr/bin/newgidmap
             sudo chmod 4755 /usr/bin/newuidmap
       - run:
+          name: Set Build Tag
+          command: |
+            if [[ -z "${BUILD_TYPE}" ]]; then
+              if [[ "${CIRCLECI_TAG}" ]]; then
+            fi
+      - run:
           name: Build Container Image
           command: |
             podman build -t "${IMAGE_NAME}:latest" .
@@ -82,33 +88,44 @@ jobs:
             echo "${GCR_AUTH}" > "${HOME}/gcr-key.json"
             cat "${HOME}/gcr-key.json" | podman login -u _json_key --password-stdin https://gcr.io
             podman image push botmin:latest gcr.io/shitty-discord-bots/botmin:latest
+
 workflows:
   version: 2
-  build_latest:
+  build_latest_push:
     jobs:
       - build_project:
-          context: docker
           filters:
             branches:
               only:
-                - develop
+                - develop   # only build latest on develop
       - build_push_latest_image:
-          context: docker
+          context:
+            - docker
+            - docker-latest
           requires:
             - build_project
-  build_test:
+  build_test_push:
     jobs:
       - test_project:
-          context: docker
           filters:
             branches:
-              only:
+              ignore:
                 - main
+            tags:
+              only:
+                - /.*/
       - build_project:
-          context: docker
           requires:
             - test_project
       - build_push_latest_image:
-          context: docker
+          context: docker     # pull environment variables
           requires:
             - build_project
+  build_nopush:
+    jobs:
+      - build_project:
+          filters:
+            branches:
+              only:
+                - /(?!develop)/ # any branch that isn't "develop"
+                - /(?!main)/    # any branch that isn't "main"
