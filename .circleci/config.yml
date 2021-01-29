@@ -36,6 +36,28 @@ jobs:
             - node_modules
             - dist
             - Dockerfile
+  test_project:
+    executor: bt_project
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - npm-cache-{{ .Branch }}-
+            - npm-cache-
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Lint Project
+          command: npm run lint
+      - run:
+          name: Test Project
+          command: npm run test
+      - save_cache:
+          paths:
+            - /home/circle_ci/app/node_modules
+          key: npm-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
   build_push_latest_image:
     executor: containerize
     steps:
@@ -51,29 +73,61 @@ jobs:
             sudo chmod 4755 /usr/bin/newgidmap
             sudo chmod 4755 /usr/bin/newuidmap
       - run:
+          name: Set Build Tag
+          command: |
+            if [[ -z "${BUILD_TYPE}" ]]; then
+              if [[ "${CIRCLECI_TAG}" ]]; then
+                export BUILD_TYPE="${CIRCLECI_TAG}"
+              fi
+            fi
+      - run:
           name: Build Container Image
           command: |
-            podman build -t "${IMAGE_NAME}:latest" .
+            podman build -t "${IMAGE_NAME}:${BUILD_TYPE}" .
       - run:
           name: Push to GCR
           command: |
             echo "${GCR_AUTH}" > "${HOME}/gcr-key.json"
             cat "${HOME}/gcr-key.json" | podman login -u _json_key --password-stdin https://gcr.io
-            podman image push botmin:latest gcr.io/shitty-discord-bots/botmin:latest
-  test:
-    executor: bt_project
-    steps:
-      - attach_workspace:
-          at: ~/app
-      - run:
-          name:
+            podman image push "${IMAGE_NAME}:${BUILD_TYPE}" "gcr.io/shitty-discord-bots/${IMAGE_NAME}:${BUILD_TYPE}"
+
 workflows:
   version: 2
-  build_latest:
+  build_latest_push:
     jobs:
       - build_project:
-          context: docker
+          filters:
+            branches:
+              only:
+                - develop   # only build latest on develop
       - build_push_latest_image:
-          context: docker
+          context:
+            - docker
+            - docker-latest
           requires:
             - build_project
+  build_test_push:
+    jobs:
+      - test_project:
+          filters:
+            branches:
+              only:
+                - main
+            tags:
+              only:
+                - /.*/
+      - build_project:
+          requires:
+            - test_project
+      - build_push_latest_image:
+          context: docker     # pull environment variables
+          requires:
+            - build_project
+  build_nopush:
+    jobs:
+      - build_project:
+          filters:
+            branches:
+              ignore:
+                - develop # any branch that isn't "develop"
+                - main  # any branch that isn't "main"
