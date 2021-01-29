@@ -1,17 +1,17 @@
 version: 2.1
 executors:
-  project:
+  bt_project:
     docker:
       - image: gcr.io/emily-cloud-build/node:14-base
     working_directory: ~/app
-  container:
+  containerize:
     machine:
       image: ubuntu-2004:202010-01
       docker_layer_caching: true
     working_directory: ~/app
 jobs:
   build_project:
-    executor: project
+    executor: bt_project
     steps:
       - checkout
       - restore_cache:
@@ -37,7 +37,7 @@ jobs:
             - dist
             - Dockerfile
   build_push_latest_image:
-    executor: container
+    executor: containerize
     steps:
       - attach_workspace:
           at: ~/app
@@ -60,7 +60,13 @@ jobs:
             echo "${GCR_AUTH}" > "${HOME}/gcr-key.json"
             cat "${HOME}/gcr-key.json" | podman login -u _json_key --password-stdin https://gcr.io
             podman image push botmin:latest gcr.io/shitty-discord-bots/botmin:latest
-
+  test:
+    executor: bt_project
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name:
 workflows:
   version: 2
   build_latest:
