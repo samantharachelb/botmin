@@ -23,17 +23,18 @@ abstract class Bot {
     }
 
     @On("guildMemberRemove")
-    async onGuildMemberRemove([member]: ArgsOf<"guildMemberRemove">): Promise<void> {
-
+    async onGuildMemberRemove([member]: ArgsOf<"guildMemberRemove">, client: Client): Promise<void> {
+        log.info(`User: ${member.displayName} was removed from server.`)
     }
 
     @On("guildMemberAdd")
     async onGuildMemberAdd([member]: ArgsOf<"guildMemberAdd">): Promise<void> {
-
+        log.info(`User: ${member.displayName} joined the server.`)
     }
 
     @On("message")
     async onMessage([message]: ArgsOf<"message">, client: Client): Promise<void> {
-
+        // @ts-ignore: property exists
+        log.info(`${message.author.username} to ${message.channel.name}: ${message.content}`);
     }
 }

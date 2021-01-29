@@ -1,9 +1,9 @@
 import { Schema, model } from 'mongoose';
 
-let schema = new Schema({
+const schema = new Schema({
     name: String,
     link: [String],
-    associated_discord: String,
+    associatedDiscord: String,
     status: {
         state: String,
         reason: String

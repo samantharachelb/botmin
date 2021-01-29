@@ -33,7 +33,7 @@ abstract class Main {
         this._client.login(Config.discordKey)
             .then(r => Promise)
             .catch((e: Error) => {
-               let error = new AuthenticationConfigError(Error);
+               const error = new AuthenticationConfigError(Error);
                forceExit(`${error}`);
             });
     }

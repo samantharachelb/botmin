@@ -42,7 +42,7 @@ export abstract class Help {
     }
 
     private static async displayCommandCategory(message: any, category: string): Promise<void> {
-        let commandList = jsonQuery(`[*category=${category}]`, {
+        const commandList = jsonQuery(`[*category=${category}]`, {
             data: HCommands.commandList
         }).value;
 
@@ -53,7 +53,7 @@ export abstract class Help {
     }
 
     public static async displaySpecificCommand(message: any, commandName: string): Promise<void> {
-        let command = jsonQuery(`[name=${commandName}]`, {
+        const command = jsonQuery(`[name=${commandName}]`, {
             data: HCommands.commandList
         }).value;
         Help.embed.setTitle(command.name);

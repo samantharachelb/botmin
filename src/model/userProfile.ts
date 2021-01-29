@@ -1,14 +1,14 @@
 import { Schema, model } from 'mongoose';
 
-let schema = new Schema({
-    discord_info: {
+const schema = new Schema({
+    discordInfo: {
         id: String,
-        known_names: [String],
-        date_created: Date
+        knownNames: [String],
+        dateCreated: Date
     },
-    facebook_info: {
+    facebookInfo: {
         name: String,
-        link: String,
+        link: String
     },
     status: {
         state: String,
