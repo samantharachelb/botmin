@@ -77,17 +77,19 @@ jobs:
           command: |
             if [[ -z "${BUILD_TYPE}" ]]; then
               if [[ "${CIRCLECI_TAG}" ]]; then
+                export BUILD_TYPE="${CIRCLECI_TAG}"
+              fi
             fi
       - run:
           name: Build Container Image
           command: |
-            podman build -t "${IMAGE_NAME}:latest" .
+            podman build -t "${IMAGE_NAME}:${BUILD_TYPE}" .
       - run:
           name: Push to GCR
           command: |
             echo "${GCR_AUTH}" > "${HOME}/gcr-key.json"
             cat "${HOME}/gcr-key.json" | podman login -u _json_key --password-stdin https://gcr.io
-            podman image push botmin:latest gcr.io/shitty-discord-bots/botmin:latest
+            podman image push "${IMAGE_NAME}:${BUILD_TYPE}" "gcr.io/shitty-discord-bots/${IMAGE_NAME}:${BUILD_TYPE}"
 
 workflows:
   version: 2
@@ -109,7 +111,7 @@ workflows:
       - test_project:
           filters:
             branches:
-              ignore:
+              only:
                 - main
             tags:
               only:
@@ -126,6 +128,6 @@ workflows:
       - build_project:
           filters:
             branches:
-              only:
-                - /(?!develop)/ # any branch that isn't "develop"
-                - /(?!main)/    # any branch that isn't "main"
+              ignore:
+                - develop # any branch that isn't "develop"
+                - main  # any branch that isn't "main"
