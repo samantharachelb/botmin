@@ -2,8 +2,8 @@ import { Client, Discord, On, ArgsOf } from "@typeit/discord";
 import "reflect-metadata";
 import path from "path";
 import Config from "@src/core/Config";
-import HCommands from "@src/helpers/HCommands"
-
+import Commands from "@src/core/Commands";
+import Profile from "@src/core/Profile";
 const log = require("@src/core/Logging").Logging.logger;
 
 @Discord(Config.botPrefix, {
@@ -12,13 +12,15 @@ const log = require("@src/core/Logging").Logging.logger;
         path.join(__dirname, 'commands/**', '*.js')
     ]
 })
-abstract class Bot {
+export default abstract class Bot {
     @On('ready')
     async onReady(args: string[], bot: Record<string, any>, client: Client): Promise<void> {
         log.info(`Logged in as ${bot.user.tag}`);
         bot.user.setActivity(`${Config.botPrefix}help`, {
             type: "LISTENING"
         });
+        Config.botId = bot.user.id;
+        Commands.indexCommands();
     }
 
     @On("guildMemberRemove")

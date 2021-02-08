@@ -1,7 +1,7 @@
- {
-  "name": "discord-blocklist",
+{
+  "name": "botmin",
   "version": "1.0.0",
-  "description": "Blocklists for Discord",
+  "description": "discord admin as a bot",
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
@@ -28,15 +28,9 @@
     "dd-trace": "^0.30.5",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "express-graphql": "^0.12.0",
-    "express-rate-limit": "^5.2.3",
-    "express-trailing-slash": "^1.0.0",
     "fs": "0.0.1-security",
     "fs-extra-promise": "^1.0.1",
-    "graphql": "^15.4.0",
     "hot-shots": "^8.2.0",
-    "ini": "^2.0.0",
     "json-query": "^2.2.2",
     "moment": "^2.29.1",
     "mongoose": "^5.11.13",
@@ -60,8 +54,6 @@
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
     "@babel/register": "^7.12.1",
-    "@types/express": "^4.17.11",
-    "@types/express-rate-limit": "^5.1.1",
     "@types/node": "^14.14.22",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.14.0",
@@ -71,7 +63,9 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "eslint": "^7.18.0",
     "nodemon": "^2.0.6",
-    "ts-node": "^9.0.0",
+    "source-map-support": "^0.5.19",
+    "ts-jest": "^26.5.0",
+    "ts-node": "^9.1.1",
     "tslint": "^6.1.3"
   }
 }

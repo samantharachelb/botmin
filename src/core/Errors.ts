@@ -39,3 +39,11 @@ export class AuthenticationConfigError extends Error {
         this.message = message;
     }
 }
+
+export class BotConfigError extends Error {
+    constructor() {
+        super();
+        this.name = "Bot Configuration Error";
+        this.message = "Missing one or more bot configuration options";
+    }
+}

@@ -2,7 +2,7 @@ import { Command, CommandMessage, Description, Infos } from '@typeit/discord';
 import { MessageEmbed } from "discord.js";
 import sendMessage from "@utils/sendMessage"
 import newEmbed from "@utils/newEmbed";
-import HCommands from "@src/helpers/HCommands";
+import Commands from "@src/core/Commands";
 import Config from "@src/core/Config";
 
 const log = require("@src/core/Logging").Logging.logger;
@@ -14,7 +14,7 @@ export abstract class Help {
 
     @Command("help :arg")
     @Infos({
-        category: "general",
+        category: "General",
         usage: "help [category|commandname](optional)"
     })
     @Description("displays command help information")
@@ -27,7 +27,7 @@ export abstract class Help {
 
         if (!arg) {
             await Help.displayAllCategories(message);
-        } else if (HCommands.categories.has(arg)){
+        } else if (Commands.categories.has(arg)){
             await Help.displayCommandCategory(message, arg);
         } else {
             await Help.displaySpecificCommand(message, arg)
@@ -35,7 +35,7 @@ export abstract class Help {
     }
 
     private static async displayAllCategories(message: any): Promise<void> {
-        HCommands.categories.forEach((item: any) => {
+        Commands.categories.forEach((item: any) => {
             Help.embed.addField(`**${item}**`, `\`${Config.botPrefix}help ${item}\``);
         })
         await sendMessage(message, Help.embed, false);
@@ -43,7 +43,7 @@ export abstract class Help {
 
     private static async displayCommandCategory(message: any, category: string): Promise<void> {
         const commandList = jsonQuery(`[*category=${category}]`, {
-            data: HCommands.commandList
+            data: Commands.commandList
         }).value;
 
         for (let index = 0; index < commandList.length; index++) {
@@ -54,7 +54,7 @@ export abstract class Help {
 
     public static async displaySpecificCommand(message: any, commandName: string): Promise<void> {
         const command = jsonQuery(`[name=${commandName}]`, {
-            data: HCommands.commandList
+            data: Commands.commandList
         }).value;
         Help.embed.setTitle(command.name);
         Help.embed.addField(command.description, `Usage: \`${command.usage}\``)

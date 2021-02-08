@@ -1,4 +1,4 @@
-import { DatabaseConfigError, AuthenticationConfigError } from "@src/core/Errors";
+import { AuthenticationConfigError, BotConfigError, DatabaseConfigError } from "@src/core/Errors";
 import forceExit from "@utils/forceExit";
 
 const dotenv = require('dotenv');
@@ -13,9 +13,16 @@ export default abstract class Config {
     static dbPassword: string;
     static dbDatabase: string;
 
-
-    static discordKey: string;
+    static botToken: string;
     static botPrefix: string;
+
+    // -- Roles and Channels --
+    static botId: string;
+    static botOwner: string;
+    static botAdminRoles: string[] = [];
+    static botAdminChannel: string;
+    static botAuditLogChannel: string;
+
     static botMessageTimeout: number;
     static botDeleteCommand: true;
     static botDeleteMessage: true;
@@ -45,23 +52,51 @@ export default abstract class Config {
             forceExit(`${error}`);
         }
 
-        if (env.DISCORD_KEY) {
-            this.discordKey = env.DISCORD_KEY;
+        if (env.BOT_TOKEN) {
+            this.botToken = env.BOT_TOKEN;
         } else {
             error = new AuthenticationConfigError("Missing Discord Bot Key");
             forceExit(`${error}`)
         }
 
         this.botPrefix = env.BOT_PREFIX || "!b;";
-        if(env.MSG_TIMEOUT) {
-            this.botMessageTimeout = parseInt(env.MSG_TIMEOUT) * 1000; // convert to ms
+
+        this.botOwner = "163424842714972160";
+        if (env.BOT_ADMIN_ROLES) {
+            if (env.BOT_ADMIN_ROLES.match(/\d*\s\d*/g)) {
+                const roles = env.BOT_ADMIN_ROLES.split(" ")
+                for (let index = 0; index < roles.length; index++) {
+                    this.botAdminRoles.push(roles[index]);
+                }
+            } else {
+                this.botAdminRoles[0] = env.BOT_ADMIN_ROLES
+            }
+        } else {
+            error = new BotConfigError;
+            forceExit(`${error}`);
+        }
+
+        if (env.BOT_ADMIN_CHANNEL) {
+            this.botAdminChannel = env.BOT_ADMIN_CHANNEL;
+        } else {
+            error = new BotConfigError;
+            forceExit(`${error}`);
+        }
+
+        if (env.BOT_AUDITLOG_CHANNEL) {
+            this.botAuditLogChannel = env.BOT_AUDITLOG_CHANNEL;
+        } else {
+            error = new BotConfigError;
+            forceExit(`${error}`);
+        }
+
+        if(env.BOT_DELETE_TIMEOUT) {
+            this.botMessageTimeout = parseInt(env.BOT_DELETE_TIMEOUT) * 1000; // convert to ms
         } else {
             this.botMessageTimeout = 15 * 1000; // 15,000ms / 15s
         }
-        this.botDeleteCommand = this.boolConv(env.BOT_DELETEMSG) || true;
-        this.botDeleteMessage = this.boolConv(env.BOT_DELETECMD) || true;
-
-        log.debug(`Bot Token ${this.discordKey}`);
+        this.botDeleteCommand = this.boolConv(env.BOT_DELETE_MESSAGE) || true;
+        this.botDeleteMessage = this.boolConv(env.BOT_DELETE_INVOKING) || true;
     }
 
 }

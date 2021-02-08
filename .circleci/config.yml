@@ -54,6 +54,10 @@ jobs:
       - run:
           name: Test Project
           command: npm run test
+      - run:
+          name: Upload artifacts
+          command: |
+            bash <(curl -s https://codecov.io/bash)
       - save_cache:
           paths:
             - /home/circle_ci/app/node_modules
@@ -118,6 +122,8 @@ workflows:
             tags:
               only:
                 - /.*/
+              ignore:
+                - docs
       - build_project:
           requires:
             - test_project
@@ -133,5 +139,6 @@ workflows:
           filters:
             branches:
               ignore:
-                - develop # any branch that isn't "develop"
-                - main  # any branch that isn't "main"
+                - develop
+                - main
+                - docs
