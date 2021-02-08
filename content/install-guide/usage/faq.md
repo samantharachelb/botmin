@@ -14,7 +14,7 @@ partof: "install guide"
 Fuck Windows, that's why. Windows is several dumpsters filled with adware stacked on top of each other disguised as an operating system that can
 barely function as an operating system.  
 
-### "But muh market share"
+### "But something something market share!!!!1!!1!111"
 I don't care
 
 ### "I tried running it on Windows anyway and it's not working right can you help"
