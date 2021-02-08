@@ -1,0 +1,73 @@
+{{ define "stylesheet" }}
+{{- partial "head/stylesheets-main.html" .}}
+{{end}}
+
+
+{{ define "body"}}
+<body class="text-center">
+{{- partial "header/header-main.html" .}}
+{{- block "main" . }}{{ end }}
+{{- partial "footer/footer-main.html" .}}
+</body>
+{{end}}
+
+{{define "main"}}
+<div class="position-relative overflow-hidden py-3 py-md-5 mb-md-3 text-center bg-black text-white">
+    <div class="row">
+        <div class="col-md-8 p-lg-5 mx-auto mt-5">
+            <h1 class="cover-headline">{{.Site.Params.headline}}</h1>
+            <p class="cover-description">{{ .Site.Params.description }}</p>
+            <p class="cover-tagline">{{.Site.Params.tagline}}</p>
+        </div>
+    </div>
+    <div class="row pb-4 mb-4">
+        <div class="col-md-8 p-lg-8 mx-auto">
+            <a class="btn btn-outline-light mr-4" href="/install-guide/getting-started">
+                <i class="fal fa-rocket" data-fa-transform="grow-5"></i>
+                Get Started
+            </a>
+            <a class="btn btn-outline-light mr-4" href="https://github.com/samantharachelb/botmin" target="_blank">
+                <i class="fab fa-github-alt" data-fa-transform="grow-5"></i>
+                View Source
+            </a>
+            <a class="btn btn-outline-light" href="https://ko-fi.com/emilysamiibocorner" target="_blank">
+                <i class="fal fa-coffee"></i>
+                Fund Project
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="main main-raised">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-5 my-auto bot-info">
+                    <h2 class="display-5">Cool thing</h2>
+                    <p class="lead text-center">
+                        description of cool thing
+                    </p>
+            </div>
+            <div class="col-md-5 my-5 py-5 bot-info-img">
+                    <div class="card bot-info-card">
+                        <p class="lead text-left">image of cool thing goes here</p>
+                    </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row justify-content-center">
+            <div class="col-md-5 my-auto bot-info">
+                <h2 class="display-5">Another cool feature</h2>
+                <p class="lead text-center">
+                    more descripions of cool thing
+                </p>
+            </div>
+            <div class="col-md-5 my-5 py-5 bot-info-img">
+                <div class="card bot-info-card">
+                    <p class="lead text-left">image of another cool thing goes here</p>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,39 @@
+@import "colors/material";
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+  padding: 3rem 1rem;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.sidebar-heading {
+  font-size: 1rem !important;
+  //padding: 1rem 0 1rem 0;
+  //border-top: 1px solid $grey-300;
+  //border-bottom: 1px solid $grey-300;
+}
+
+.sidebar .nav-link {
+  font-weight: 400;
+  font-size: .9rem !important;
+  color: $grey-700;
+}
+
+.sidebar .feather {
+  margin-left: 1rem;
+}
+
+.sidebar .nav-link:active {
+  color: $light-blue-400;
+}
+
+.sidebar .nav-link:hover {
+  color: $light-blue-600;
+}
+
+.sidebar .inline-icon {
+  margin-left: .5rem;
+}

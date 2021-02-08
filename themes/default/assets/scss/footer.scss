@@ -1,0 +1,24 @@
+@import "colors/material";
+.footer-container .bg-black{
+  background-color: black;
+  color: white !important;
+}
+
+.footer-guide {
+  background-color: white;
+  position: fixed;
+  color: $blue-grey-100;
+  left: 0;
+  bottom: 0;
+  min-width: 100vw;
+}
+
+.footer-line {
+  border-top: 1px solid $grey-200;
+}
+
+.footer_brand {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+}

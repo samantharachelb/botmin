@@ -1,0 +1,86 @@
+baseURL="https://shittydiscordbots.xyz"
+languageCode = "en-us"
+title = "Botmin Docs"
+theme = "default"
+enableGitInfo = true
+
+# --- Menu Settings ---
+[menu]
+[[menu.main]]
+name = "Installation"
+pre = "<i class='far fa-download'></i>"
+identifier = "installation"
+url = "/install-guide/introduction"
+weight = 10
+[[menu.main]]
+name = "FAQ"
+pre = "<i class='fal fa-question-circle'></i>"
+identifier = "faq"
+url = "/"
+weight = 20
+[[menu.guide]]
+name = "Install Guide"
+identifier = "installguide"
+weight = 1
+[[menu.install]]
+name = "Installation"
+identifier = "installation"
+weight = 10
+[[menu.usage]]
+name = "Using LotionBoy"
+identifier = "usage"
+weight = 20
+
+# --- Markdown Settings ---
+[markup]
+defaultMarkdownHandler = "goldmark"
+[markup.goldmark]
+    [markup.goldmark.extensions]
+        definitionList = true
+        footnote = true
+        linkify = true
+        strikethrough = true
+        table = true
+        taskList = true
+        typographer = true
+    [markup.goldmark.parser]
+        attribute = true
+        autoHeadingID = true
+        autoHeadingIDType = "github"
+
+    [markup.goldmark.renderer]
+        hardWraps = true
+        unsafe = true
+        xhtml = false
+
+    [markup.highlight]
+        codeFences = true
+        guessSyntax = false
+        hl_Lines = ""
+        lineNoStart = 1
+        lineNos = false
+        lineNumbersInTable = true
+        noClasses = true
+        style = "monokai"
+        tabWidth = 4
+
+# --- Privacy Settings ---
+[privacy]
+    [privacy.disqus]
+        disable = true
+    [privacy.googleAnalytics]
+        disable = true
+    [privacy.instagram]
+        disable = true
+    [privacy.twitter]
+        disable = true
+    [privacy.vimeo]
+        disable = true
+    [privacy.youtube]
+        disable = true
+
+# --- Site Parameters ---
+[Params]
+    headline = "Discord Administration as a Service"
+    description = "Discord Robot meets Adminstration."
+    tagline = "Botmin, if you will"

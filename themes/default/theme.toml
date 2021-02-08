@@ -1,0 +1,12 @@
+name = "default"
+license = "MIT"
+licenselink = "https://github.com/samantharachelb/botmin/blob/docs/License"
+description = ""
+homepage = ""
+tags = []
+feature = []
+min_version = "0.41.0"
+
+[author]
+    name = "samantha belnavis"
+    homepage = ""

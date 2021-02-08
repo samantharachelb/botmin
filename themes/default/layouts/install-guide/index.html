@@ -1,0 +1,26 @@
+{{define "body"}}
+<body class="d-flex flex-column min-vh-100">
+{{- partial "header/header-guide.html" .}}
+{{- partial "sidebar/sidebar-guide.html" .}}
+<main class="col-md-9 col-lg-10 ml-sm-auto px-md-4 guide-contents">
+    <div class="container py-2 my-2">
+        <h1 class="guide-title">{{ .Title | markdownify }}</h1>
+        {{ if .Description }}
+        <h2 class="guide-description">{{.Description | markdownify}}</h2>
+        {{ end }}
+    </div>
+    <hr />
+    {{ if eq .Page.Params.partof "install guide" }}
+    <div class="container py-1 my-1">
+        <h3 class="post-date">
+            Last updated: {{ .Lastmod.Format "2006-01-02 15:04 EST" }}
+        </h3>
+    </div>
+    {{ end }}
+    <div class="container markdown py-1 my-1">
+        {{.Content }}
+    </div>
+</main>
+{{- partial "footer/footer-guide.html" .}}
+</body>
+{{end}}

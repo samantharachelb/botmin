@@ -1,0 +1,5 @@
+<!-- Stylesheets -->
+{{ $main_css := resources.Get "scss/main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $main_css.RelPermalink }}" />
+<link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.1/normalize.css" />
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/atom-one-dark.min.css">
