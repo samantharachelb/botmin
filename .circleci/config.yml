@@ -24,7 +24,7 @@ jobs:
           command: |
             npm ci
             npm run build
-            npm prune -- production
+            npm prune --production
             /usr/local/bin/node-prune
       - save_cache:
           paths:
